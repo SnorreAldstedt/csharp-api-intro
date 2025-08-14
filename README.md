@@ -1,5 +1,15 @@
 # C# API Intro
 
+## Commands
+
+```
+dotnet new sln --name workshop
+dotnet new webapi --name workshop.wwwapi
+dotnet sln add **/*.csproj
+```
+Visual studio:
+```start devenv workshop.sln```
+VS Code: ```code .```
 
 ## Installing Scalar/Swashbuckle
 
