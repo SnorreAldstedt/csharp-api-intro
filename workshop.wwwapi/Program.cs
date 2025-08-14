@@ -5,13 +5,14 @@ using workshop.wwwapi;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+builder.Services.AddScoped<IRepository, Repository>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -28,9 +29,9 @@ app.UseHttpsRedirection();
 
 BandDataStore.Initialize();
 
-//app.ConfigureNigelify();
+app.ConfigureNigelify();
 
-//app.ConfigureBand();
+app.ConfigureBand();
 
 app.Run();
 

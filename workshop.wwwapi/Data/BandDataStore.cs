@@ -22,5 +22,14 @@ namespace workshop.wwwapi.Data
         {
             _bands.Add(band);
         }
+        public static bool DeleteBandById(int id)
+        {
+            return _bands.RemoveAll(x => x.Id == id) > 0 ? true : false;
+        }
+        public static Band GetBandById(int id)
+        {
+            var entity = _bands.FirstOrDefault(b => b.Id == id);
+            return entity;
+        }
     }
 }

@@ -70,3 +70,14 @@ Update both the launchBrowser and launchUrl keys
 ```
 
 
+## Models Folder
+
+The models folder contains simple classes to represent Entities in our api application.
+
+## Data Folder
+
+The Data folder we place a static collection to represent our systems data.  Later we'll swap this out 
+
+## Endpoints Folder
+
+To keep the ```Program.cs``` tidy we've placed the Endpoints into a folder and created a static class with a static configure method.  We call this from the Program.cs to setup those endpoints.
