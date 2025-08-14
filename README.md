@@ -1,5 +1,8 @@
 # C# API Intro
 
+## Setup
+
+The ```.gitignore ``` is important in our webapi.  We don't want to upload certain files.  When we build our pro
 ## Commands
 
 ```
@@ -65,3 +68,5 @@ Update both the launchBrowser and launchUrl keys
   }
 }
 ```
+
+
