@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
+using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
 {
@@ -18,69 +18,37 @@ namespace workshop.wwwapi.Endpoints
 
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetBands()
+        public static async Task<IResult> GetBands(IRepository repository)
         {
-            return TypedResults.Ok(BandDataStore.GetBands());
+            var results = await repository.GetAsync();
+            return TypedResults.Ok(results);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> AddBand(Band band)
+        public static async Task<IResult> AddBand(IRepository repository, Band band)
         {
-            BandDataStore.AddBand(band);
+            var results = repository.GetAsync();
 
             return TypedResults.Ok(band);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Delete(int id)
-        {
-            var bands = BandDataStore.GetBands();
-            var target = bands.FirstOrDefault(b => b.Id== id);
-                       
-            return BandDataStore.DeleteBandById(id) ? TypedResults.Ok(target) : TypedResults.NotFound();
+        public static async Task<IResult> Delete(IRepository repository, int id)
+        {            
+            var entity = repository.DeleteAsync(id);
+            return entity is not null ? TypedResults.Ok(entity) : TypedResults.NotFound();
 
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Update(int id, Band model)
-        {
-            var bands = BandDataStore.GetBands();
+        public static async Task<IResult> Update(IRepository repository, int id, Band model)
+        {            
+            var entity = repository.GetByIdAsync(id);           
 
-            var entity = bands.FirstOrDefault(b => b.Id == id);
 
-            if (entity is null)
-            {
-                return TypedResults.NotFound();
-            }
-
-            //entity.Id = model.Id;
-            entity.Name = model.Name;
-            entity.Genre = model.Genre;
-            entity.MemberCount = model.MemberCount;
 
             return TypedResults.Ok(entity);
 
         }
-
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- app.MapPost("bands", (Band band) =>
-            {
-                BandDataStore.AddBand(band);
-                return band;
-            });
-*/

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using System.Reflection.Metadata.Ecma335;
 using workshop.wwwapi;
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddDbContext<DataContext>(options => options.UseInMemoryDatabase("bandsdb"));
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -26,10 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-BandDataStore.Initialize();
-
-app.ConfigureNigelify();
 
 app.ConfigureBand();
 

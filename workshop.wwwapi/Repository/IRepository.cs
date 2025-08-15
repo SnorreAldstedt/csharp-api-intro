@@ -4,9 +4,9 @@ namespace workshop.wwwapi.Repository
 {
     public interface IRepository
     {
-        List<Band> Get();
-        Band GetById(int id);
-        Band Delete(int id);
-        Band Update(int id, Band model);
+        Task<List<Band>> GetAsync();
+        Task<Band> GetByIdAsync(int id);
+        Task<Band> DeleteAsync(int id);
+        Task<Band> UpdateAsync(int id, Band model);
     }
 }

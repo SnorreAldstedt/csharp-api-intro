@@ -81,3 +81,12 @@ The Data folder we place a static collection to represent our systems data.  Lat
 ## Endpoints Folder
 
 To keep the ```Program.cs``` tidy we've placed the Endpoints into a folder and created a static class with a static configure method.  We call this from the Program.cs to setup those endpoints.
+
+
+
+## Branch
+
+To get to the different branches on this repo use the following commands:
+
+- ```git branch``` lists the branches
+- ```git branch inmemorylist``` checks out the inmemorylist branch

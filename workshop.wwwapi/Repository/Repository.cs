@@ -1,33 +1,38 @@
-﻿using workshop.wwwapi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository
 {
     public class Repository : IRepository
     {
-        public Band Delete(int id)
+        private DataContext _db;
+        public Repository(DataContext db)
         {
-            var target = BandDataStore.GetBandById(id);
-            return BandDataStore.DeleteBandById(id) ? target : null;
+            _db = db;
+        }
+        public async Task<List<Band>> GetAsync()
+        {
+            return await _db.Bands.ToListAsync();            
         }
 
-        public List<Band> Get()
+        public async Task<Band> DeleteAsync(int id)
         {
-            return BandDataStore.GetBands();
+            var target = await _db.Bands.FindAsync(id);
+            _db.Bands.Remove(target);
+            await _db.SaveChangesAsync();
+            return target;
+
+        }
+       
+        public async Task<Band> GetByIdAsync(int id)
+        {
+            return await _db.Bands.FindAsync(id);
         }
 
-        public Band GetById(int id)
+        public async Task<Band> UpdateAsync(int id, Band model)
         {
             throw new NotImplementedException();
-        }
-
-        public Band Update(int id, Band model)
-        {
-            throw new NotImplementedException();
-        }
-        public void Add(Band band)
-        {
-            BandDataStore.AddBand(band);
         }
     }
 }
