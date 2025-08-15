@@ -24,18 +24,18 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(results);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> AddBand(IRepository repository, Band band)
+        public static async Task<IResult> AddBand(IRepository repository, Band model)
         {
-            var results = repository.GetAsync();
+            var results = await repository.AddAsync(model);
 
-            return TypedResults.Ok(band);
+            return TypedResults.Ok(model);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> Delete(IRepository repository, int id)
         {            
-            var entity = repository.DeleteAsync(id);
+            var entity = await repository.DeleteAsync(id);
             return entity is not null ? TypedResults.Ok(entity) : TypedResults.NotFound();
 
         }

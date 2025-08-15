@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
@@ -14,6 +15,13 @@ namespace workshop.wwwapi.Repository
         public async Task<List<Band>> GetAsync()
         {
             return await _db.Bands.ToListAsync();            
+        }
+        public async Task<Band> AddAsync(Band entity)
+        {
+            await _db.Bands.AddAsync(entity);
+            await _db.SaveChangesAsync();
+            return entity;
+
         }
 
         public async Task<Band> DeleteAsync(int id)
