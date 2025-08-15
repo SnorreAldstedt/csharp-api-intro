@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using workshop.wwwapi.Data;
+using workshop.wwwapi.DTOs;
 using workshop.wwwapi.Models;
 using workshop.wwwapi.Repository;
 
@@ -12,10 +13,19 @@ namespace workshop.wwwapi.Endpoints
             var bands = app.MapGroup("bands");
 
             bands.MapGet("/", GetBands);
+            bands.MapGet("/{id}", GetBandById);
             bands.MapPost("/", AddBand);
             bands.MapDelete("/{id}", Delete);
             bands.MapPut("/{id}", Update);
 
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> GetBandById(IRepository repository, int id)
+        {
+            var item = await repository.GetByIdAsync(id);
+            if (item == null) return TypedResults.NotFound(new { Error="No Band Found!"});
+            return TypedResults.Ok(item);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetBands(IRepository repository)
@@ -24,11 +34,16 @@ namespace workshop.wwwapi.Endpoints
             return TypedResults.Ok(results);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> AddBand(IRepository repository, Band model)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public static async Task<IResult> AddBand(IRepository repository, BandPost model)
         {
-            var results = await repository.AddAsync(model);
+            Band entity = new Band();
+            entity.Name = model.Name;
+            entity.Genre = model.Genre;
+            entity.MemberCount = model.MemberCount;
+            var results = await repository.AddAsync(entity);
 
-            return TypedResults.Ok(model);
+            return TypedResults.Created($"https://localhost:7239/bands/{entity.Id}",new { BandName=model.Name, BandGenre=model.Genre, DateCreate=DateTime.Now, BandMemberCount=model.MemberCount });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,9 +56,16 @@ namespace workshop.wwwapi.Endpoints
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public static async Task<IResult> Update(IRepository repository, int id, Band model)
+        public static async Task<IResult> Update(IRepository repository, int id, BandPut model)
         {            
-            var entity = repository.GetByIdAsync(id);           
+            var entity = await repository.GetByIdAsync(id);
+
+            if (model.Name != null) entity.Name = model.Name;
+            if (model.MemberCount != null) entity.MemberCount = model.MemberCount.Value;
+            if (model.Genre != null) entity.Genre = model.Genre;
+
+
+            
 
 
 

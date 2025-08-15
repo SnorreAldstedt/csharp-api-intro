@@ -1,9 +1,7 @@
-﻿
-namespace workshop.wwwapi.Models
+﻿namespace workshop.wwwapi.DTOs
 {
-    public class Band
-    {        
-        public int Id { get; set; }
+    public class BandPost
+    {
         public string Name { get; set; }
         public string Genre { get; set; }
         public int MemberCount { get; set; }
